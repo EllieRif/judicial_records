@@ -38,14 +38,11 @@ summary(judicial_appts)
 ```{r}
 judicial_appts %>% 
   #filter(grepl("Confirmed", Latest.Action)) %>% 
-  group_by(Congress) %>% 
-  summarise(n_apts=n())
+  group_by(Congress) %>%
+  filter(In.Favor>0) %>% 
+  
+  summarise(n=n(), mean=mean(In.Favor), median=median(In.Favor))
 
-judicial_appts %>% 
-  #filter(grepl("Confirmed", Latest.Action)) %>% 
-  group_by(President, Role) %>%
-  #group_by(Role) %>% 
-  summarise(n=n())
 
 ```
 
@@ -92,18 +89,18 @@ judicial_appts %>%
 judicial_appts %>% 
   #group_by(Role) %>% 
   ggplot() +
-  geom_count(mapping = aes(y=Role, x=President))
+  geom_bar(mapping = aes(x=Congress, color=President), size=2)
 ```
-```{r}
-judicial_appts %>% 
-  select(Role) %>% 
-  unique()
 
-```
 ```{r}
 judicial_appts %>%
   group_by(President, Role) %>% 
+  summarise(n=n(), mean=mean(In.Favor))
+
+judicial_appts %>%
+  group_by(President) %>% 
   summarise(n=n())
+
 
 ```
 ```{r}
@@ -111,7 +108,7 @@ judicial_appts %>%
 judicial_appts %>%
   #filter(Role=="United States District Judge") %>% 
   
-  group_by(Congress, Role) %>% 
+  group_by(Congress) %>% 
   summarise(n=n())
 
 ```
