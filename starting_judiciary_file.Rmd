@@ -1,0 +1,125 @@
+---
+title: "judiciary_preliminary_analysis"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+
+
+
+```{r}
+
+library(tidyverse)
+
+```
+
+```{r}
+judicial_appts <- read.csv("cleaned judiciary data.csv")
+
+#glimpse(judicial_appts)
+
+judicial_appts <- select(judicial_appts,-X, -Description, -URL, -District.Location)
+
+summary(judicial_appts)
+```
+
+
+```{r}
+judicial_appts %>% 
+  filter(grepl("Confirmed", Latest.Action)) %>% 
+  group_by(Congress) %>% 
+  summarise(n_apts=n())
+
+judicial_appts %>% 
+  filter(grepl("Confirmed", Latest.Action)) %>% 
+  group_by(President, Role) %>%
+  #group_by(Role) %>% 
+  summarise(n=n())
+
+```
+
+```{r}
+ judicial_appts %>% 
+  ggplot() + 
+  geom_histogram(mapping=aes(Length.of.Confirmation.Proceedings, color=President, fill=President))
+```
+
+```{r}
+judicial_appts %>% 
+  group_by(President) %>% 
+  ggplot() + 
+  geom_boxplot(mapping=aes(y=In.Favor, x=President, fill=Congress))
+```
+
+```{r}
+judicial_appts %>% 
+  ggplot() + 
+  geom_point(mapping=aes(y=Margin, x=Length.of.Confirmation.Proceedings, color=President))
+```
+```{r}
+judicial_appts %>% 
+  filter(Role==" an Associate Justice of the Supreme Court of the United States" | Role==" Chief Justice of the United States") %>% 
+  ggplot() + 
+  geom_count(mapping=aes(x=Name, y=Length.of.Confirmation.Proceedings))
+```
+
+```{r}
+judicial_appts %>% 
+filter(President=="Trump" | President=="Obama") %>% 
+  ggplot() + 
+  geom_bin2d(mapping=aes(x=In.Favor, y=Congress))
+```
+```{r}
+judicial_appts %>% 
+  filter(Congress=="111th Congress (2009-2010)") %>% 
+  glimpse()
+
+judicial_appts %>% 
+  filter (In.Favor>40) %>% 
+  #arrange(desc(Date.Received.From.President)) %>% 
+  ggplot() + 
+  geom_histogram(mapping=aes(x=In.Favor, fill=Congress),binwidth = 2)
+
+
+
+```
+```{r}
+
+judicial_appts %>% 
+  filter(Margin>0, President!="Trump", President!="Obama") %>% 
+  ggplot() + 
+  geom_histogram(mapping=aes(x=In.Favor, fill=Congress),binwidth = 3)
+
+```
+
+
+```{r}
+judicial_appts %>% 
+  #group_by(Role) %>% 
+  ggplot() +
+  geom_count(mapping = aes(x=Role, y=President, color=Congress))
+```
+
