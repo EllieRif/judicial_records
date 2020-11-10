@@ -119,3 +119,10 @@ votesdf %>%
 
 ```
 
+```{r}
+milyea <- yea_barrett/1000000
+milnea <- nay_barrett/1000000
+
+barplot(height = c(yea_barrett, nay_barrett), width = 0.5, names.arg = c("Votes Received by Those Who Confirmed Barrett", "Votes received by those who voted against Barrett"))
+```
+
