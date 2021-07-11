@@ -61,9 +61,15 @@ judicial_appts %>%
 judicial_appts %>% 
   group_by(President) %>% 
   ggplot() + 
-  geom_boxplot(mapping=aes(y=In.Favor, x=President, fill=Congress))
+  geom_boxplot(mapping=aes(y=In.Favor, x=President, fill=Congress)) + facet_wrap(~President)
 ```
 
+```{r}
+judicial_appts %>% 
+  group_by(President) %>% 
+  ggplot() + 
+  geom_boxplot(mapping=aes(y=In.Favor, x=Congress, fill=Congress)) + facet_wrap(~President)
+```
 
 
 
@@ -77,7 +83,8 @@ judicial_appts %>%
   filter (In.Favor>0) %>% 
   #arrange(desc(Date.Received.From.President)) %>% 
   ggplot() + 
-  geom_histogram(mapping=aes(x=In.Favor, fill=President),binwidth = 2)
+  geom_histogram(mapping=aes(x=In.Favor, fill=President),binwidth = 2) +
+  facet_wrap(~President)
 
 
 
@@ -108,7 +115,7 @@ judicial_appts %>%
 judicial_appts %>%
   #filter(Role=="United States District Judge") %>% 
   
-  group_by(Congress) %>% 
+  group_by(President, Congress) %>% 
   summarise(n=n())
 
 ```

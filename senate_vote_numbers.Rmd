@@ -113,9 +113,13 @@ votesdf <- data.frame(chart_labels, votesvec)
 milvotes <- votesdf %>% 
   mutate(mils=votesvec/1000000) 
 
-votesdf %>% 
+milvotes %>% 
   ggplot() +
-  geom_point(mapping = aes(y=votesvec, x=chart_labels, size=votesvec,  color=chart_labels))
+  geom_point(mapping = aes(y=mils, x=chart_labels, size=mils,  color=chart_labels))
+
+milvotes %>% 
+  ggplot() +
+  geom_col(mapping = aes(y=mils, x = chart_labels,  color=chart_labels))
 
 ```
 
@@ -123,6 +127,6 @@ votesdf %>%
 milyea <- yea_barrett/1000000
 milnea <- nay_barrett/1000000
 
-barplot(height = c(yea_barrett, nay_barrett), width = 0.5, names.arg = c("Votes Received by Those Who Confirmed Barrett", "Votes received by those who voted against Barrett"))
+barplot(height = c(milyea, milnea), width = 0.5, names.arg = c("Votes Confirmed", "Votes Against"))
 ```
 
